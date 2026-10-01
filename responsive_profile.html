@@ -249,15 +249,15 @@ function kirimWhatsApp() {
 
     const nomorWhatsApp = "6289673314273";
 
-    const teks = 
-        "Halo Plam-In Barbershop! 👋%0A%0A" +
-        "*Nama:* " + nama + "%0A" +
-        "*Nomor HP:* " + nohp + "%0A" +
-        "*Pesan:* " + pesan;
+   const teks = `Halo Plam-In Barbershop! 👋
 
-    const url = "https://wa.me/" + nomorWhatsApp + "?text=" + teks;
+*Nama:* ${nama}
+*Nomor HP:* ${nohp}
+*Pesan:* ${pesan}`;
 
-    window.open(url, "_blank");
+const url = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(teks)}`;
+
+window.open(url, "_blank");
 }
 </script>
   

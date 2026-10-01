@@ -188,12 +188,12 @@ required
 </div>
 
 <div class="form-group">
-<label for="email">Email</label>
+<label for="nohp">Nomor Handphone</label>
 <input 
-type="email" 
-id="email" 
-name="email" 
-placeholder="Masukkan email Anda"
+type="tel" 
+id="nohp" 
+name="nohp" 
+placeholder="Masukkan nomor handphone Anda"
 required
 >
 </div>
@@ -210,8 +210,8 @@ required
 </div>
 
 <button type="submit" class="btn-submit">
-<i class="fa-solid fa-paper-plane"></i>
-Kirim
+<i class="fa-brands fa-whatsapp"></i>
+Kirim via WhatsApp
 </button>
 
 </form>
@@ -228,5 +228,27 @@ Kirim
 UNISBANK.</p>
 </div>
 </footer>
+
+<script>
+function kirimWhatsApp() {
+
+    const nama = document.getElementById("nama").value;
+    const nohp = document.getElementById("nohp").value;
+    const pesan = document.getElementById("pesan").value;
+
+    const nomorWhatsApp = "6289673314273";
+
+    const teks = 
+        "Halo Plam-In Barbershop! 👋%0A%0A" +
+        "*Nama:* " + nama + "%0A" +
+        "*Nomor HP:* " + nohp + "%0A" +
+        "*Pesan:* " + pesan;
+
+    const url = "https://wa.me/" + nomorWhatsApp + "?text=" + teks;
+
+    window.open(url, "_blank");
+}
+</script>
+  
 </body>
 </html>

@@ -335,6 +335,16 @@
         </p>
       </div>
     </div>
+
+    <div id="detailPanel" class="card section-card mt-4 d-none">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="h5 page-title mb-0">Detail Reservasi</h3>
+          <button type="button" id="closeDetail" class="btn-close" aria-label="Tutup detail"></button>
+        </div>
+        <div id="detailContent" class="row g-3"></div>
+      </div>
+    </div>
   </section>
 </main>
 
@@ -476,20 +486,42 @@ $(function () {
     const item = readReservations().find(
       reservation => reservation.kode === $(this).data("kode")
     );
-
     if (!item) return;
 
-    alert(
-      "DETAIL RESERVASI\n\n" +
-      "Nama: " + item.nama + "\n" +
-      "Telepon: " + item.telepon + "\n" +
-      "Alamat: " + item.alamat + "\n" +
-      "Layanan: " + item.layanan + "\n" +
-      "Tanggal: " + item.tanggal + "\n" +
-      "Waktu: " + item.waktu + "\n" +
-      "Catatan: " + (item.catatan || "Tidak ada") + "\n" +
-      "Status: " + item.status
+    $("#detailContent").html(
+      '<div class="col-md-6"><div class="text-secondary small fw-bold">Kode Reservasi</div><div>' + safeText(item.kode) + '</div></div>' +
+      '<div class="col-md-6"><div class="text-secondary small fw-bold">Status Saat Ini</div><div><span class="status">' + safeText(item.status) + '</span></div></div>' +
+      '<div class="col-md-6"><div class="text-secondary small fw-bold">Nama Pelanggan</div><div>' + safeText(item.nama) + '</div></div>' +
+      '<div class="col-md-6"><div class="text-secondary small fw-bold">Nomor Telepon</div><div>' + safeText(item.telepon) + '</div></div>' +
+      '<div class="col-12"><div class="text-secondary small fw-bold">Alamat</div><div>' + safeText(item.alamat) + '</div></div>' +
+      '<div class="col-md-6"><div class="text-secondary small fw-bold">Layanan</div><div>' + safeText(item.layanan) + '</div></div>' +
+      '<div class="col-md-6"><div class="text-secondary small fw-bold">Jadwal</div><div>' + safeText(item.tanggal) + ' · ' + safeText(item.waktu) + '</div></div>' +
+      '<div class="col-12"><div class="text-secondary small fw-bold">Catatan</div><div>' + safeText(item.catatan || "Tidak ada catatan") + '</div></div>' +
+      '<div class="col-12"><label for="newStatus" class="form-label fw-bold">Ubah Status Reservasi</label>' +
+      '<div class="d-flex flex-column flex-sm-row gap-2"><select id="newStatus" class="form-select">' +
+      '<option ' + (item.status === "Menunggu" ? "selected" : "") + '>Menunggu</option>' +
+      '<option ' + (item.status === "Dikonfirmasi" ? "selected" : "") + '>Dikonfirmasi</option>' +
+      '<option ' + (item.status === "Dibatalkan" ? "selected" : "") + '>Dibatalkan</option>' +
+      '</select><button type="button" id="saveStatus" class="btn btn-accent" data-kode="' + safeText(item.kode) + '">Simpan Status</button></div>' +
+      '<div class="form-text">Perubahan disimpan pada browser ini saja.</div></div>'
     );
+    $("#detailPanel").removeClass("d-none");
+    $("html, body").animate({ scrollTop: $("#detailPanel").offset().top - 90 }, 250);
+  });
+
+  $("#detailContent").on("click", "#saveStatus", function () {
+    const kode = $(this).data("kode");
+    const items = readReservations();
+    const item = items.find(reservation => reservation.kode === kode);
+    if (!item) return;
+    item.status = $("#newStatus").val();
+    localStorage.setItem(storageKey, JSON.stringify(items));
+    $("#detailPanel").addClass("d-none");
+    renderDashboard();
+  });
+
+  $("#closeDetail").on("click", function () {
+    $("#detailPanel").addClass("d-none");
   });
 
   renderDashboard();
